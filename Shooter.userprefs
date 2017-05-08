@@ -1,12 +1,14 @@
 ﻿<Properties StartupConfiguration="{9AC71EF3-231C-4F1E-BB03-A8A8E1962450}|Default">
   <MonoDevelop.Ide.ItemProperties.Shooter PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Shooter/View/ParallaxingBackground.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Shooter/Controller/Program.cs">
     <Files>
       <File FileName="Shooter/Model/Player.cs" Line="53" Column="3" />
-      <File FileName="Shooter/Controller/SteamPunkShooterGame.cs" Line="140" Column="5" />
+      <File FileName="Shooter/Controller/SteamPunkShooterGame.cs" Line="356" Column="6" />
       <File FileName="Shooter/View/Animation.cs" Line="132" Column="1" />
       <File FileName="Shooter/View/ParallaxingBackground.cs" Line="25" Column="1" />
-      <File FileName="Shooter/Model/Enemy.cs" Line="1" Column="1" />
+      <File FileName="Shooter/Model/Enemy.cs" Line="5" Column="24" />
+      <File FileName="Shooter/Model/Projectile.cs" Line="49" Column="29" />
+      <File FileName="Shooter/Controller/Program.cs" Line="14" Column="19" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />

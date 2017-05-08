@@ -11,7 +11,7 @@ using UIKit;
 #endif
 #endregion
 
-namespace Shooter
+namespace Shooter.Controller
 {
 #if __IOS__ || __TVOS__
     [Register("AppDelegate")]
