@@ -45,6 +45,7 @@
     <Compile Include="View\ParallaxingBackground.cs" />
     <Compile Include="Model\Enemy.cs" />
     <Compile Include="Model\Projectile.cs" />
+    <Compile Include="Model\CannonBall.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.manifest" />

@@ -37,6 +37,9 @@ namespace Shooter.Controller
 		Texture2D projectileTexture;
 		List<Projectile> projectiles;
 
+		Texture2D cannonBallTexture;
+		List<CannonBall> cannonBalls;
+
 		// The rate of fire of the player laser
 		TimeSpan fireTime;
 		TimeSpan previousFireTime;
@@ -53,10 +56,10 @@ namespace Shooter.Controller
 		// The music played during gameplay
 		Song gameplayMusic;
 
-//Number that holds the player score
-int score;
-// The font used to display UI elements
-SpriteFont font;
+		//Number that holds the player score
+		int score;
+		// The font used to display UI elements
+		SpriteFont font;
 
 		GraphicsDeviceManager graphics;
 		SpriteBatch spriteBatch;
@@ -113,13 +116,15 @@ SpriteFont font;
 
 			projectiles = new List<Projectile>();
 
+			cannonBalls = new List<CannonBall>();
+
 			// Set the laser to fire every quarter second
 			fireTime = TimeSpan.FromSeconds(.15f);
 
 			explosions = new List<Animation>();
 
 			//Set player's score to zero
-score = 0;
+			score = 0;
 
 			base.Initialize();
 		}
@@ -149,6 +154,7 @@ score = 0;
 
 			mainBackground = Content.Load<Texture2D>("Texture/mainbackground");
 			projectileTexture = Content.Load<Texture2D>("Texture/laser");
+			cannonBallTexture = Content.Load<Texture2D>("Fireball.png");
 			explosionTexture = Content.Load<Texture2D>("Animation/explosion");
 
 			// Load the music
@@ -162,7 +168,7 @@ score = 0;
 			PlayMusic(gameplayMusic);
 
 			// Load the score font
-font = Content.Load<SpriteFont>("Font/gameFont");
+			font = Content.Load<SpriteFont>("Font/gameFont");
 
 			//TODO: use this.Content to load your game content here 
 		}
@@ -202,6 +208,7 @@ font = Content.Load<SpriteFont>("Font/gameFont");
 
 			// Update the projectiles
 			UpdateProjectiles();
+			UpdateCannonBalls();
 
 			// Update the explosions
 			UpdateExplosions(gameTime);
@@ -257,12 +264,27 @@ font = Content.Load<SpriteFont>("Font/gameFont");
 				}
 			}
 
+			if (currentKeyboardState.IsKeyDown(Keys.Z))
+			{
+				// Fire only every interval we set as the fireTime
+				if (gameTime.TotalGameTime - previousFireTime > fireTime)
+				{
+					// Reset our current time
+					previousFireTime = gameTime.TotalGameTime;
+
+					// Add the projectile, but add it to the front and center of the player
+					AddCannonBall(player.Position + new Vector2(player.Width / 2, 0));
+					// Play the laser sound
+					//laserSound.Play();
+				}
+			}
+
 			// reset score if player health goes to zero
-if (player.Health <= 0)
-{
-player.Health = 100;
-score = 0;
-}
+			if (player.Health <= 0)
+			{
+				player.Health = 100;
+				score = 0;
+			}
 
 			// Fire only every interval we set as the fireTime
 			//	if (gameTime.TotalGameTime - previousFireTime > fireTime)
@@ -305,6 +327,11 @@ score = 0;
 				projectiles[i].Draw(spriteBatch);
 			}
 
+			for (int i = 0; i < cannonBalls.Count; i++)
+			{
+				cannonBalls[i].Draw(spriteBatch);
+			}
+
 			// Draw the explosions
 			for (int i = 0; i < explosions.Count; i++)
 			{
@@ -312,9 +339,9 @@ score = 0;
 			}
 
 			// Draw the score
-spriteBatch.DrawString(font, "score: " + score, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y), Color.White);
-// Draw the player health
-spriteBatch.DrawString(font, "health: " + player.Health, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + 30), Color.White);
+			spriteBatch.DrawString(font, "score: " + score, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y), Color.White);
+			// Draw the player health
+			spriteBatch.DrawString(font, "health: " + player.Health, new Vector2(GraphicsDevice.Viewport.TitleSafeArea.X, GraphicsDevice.Viewport.TitleSafeArea.Y + 30), Color.White);
 			// Stop drawing
 			spriteBatch.End();
 			//TODO: Add your drawing code here
@@ -369,7 +396,7 @@ spriteBatch.DrawString(font, "health: " + player.Health, new Vector2(GraphicsDev
 						// Play the explosion sound
 						explosionSound.Play();
 						//Add to the player's score
-score += enemies[i].Value;
+						score += enemies[i].Value;
 					}
 					enemies.RemoveAt(i);
 				}
@@ -439,12 +466,41 @@ score += enemies[i].Value;
 					}
 				}
 			}
+
+			for (int i = 0; i < cannonBalls.Count; i++)
+			{
+				for (int j = 0; j < enemies.Count; j++)
+				{
+					// Create the rectangles we need to determine if we collided with each other
+					rectangle1 = new Rectangle((int)cannonBalls[i].Position.X -
+											   cannonBalls[i].Width / 2, (int)cannonBalls[i].Position.Y -
+											   cannonBalls[i].Height / 2, cannonBalls[i].Width, cannonBalls[i].Height);
+
+					rectangle2 = new Rectangle((int)enemies[j].Position.X - enemies[j].Width / 2,
+					(int)enemies[j].Position.Y - enemies[j].Height / 2,
+					enemies[j].Width, enemies[j].Height);
+
+					// Determine if the two objects collided with each other
+					if (rectangle1.Intersects(rectangle2))
+					{
+						enemies[j].Health -= cannonBalls[i].Damage;
+						cannonBalls[i].Active = false;
+					}
+				}
+			}
 		}
 		private void AddProjectile(Vector2 position)
 		{
 			Projectile projectile = new Projectile();
 			projectile.Initialize(GraphicsDevice.Viewport, projectileTexture, position);
 			projectiles.Add(projectile);
+		}
+
+		private void AddCannonball(Vector2 position)
+		{
+			CannonBall cannonBall = new CannonBall();
+			cannonBall.Initialize(GraphicsDevice.Viewport, cannonBallTexture, position);
+			cannonBall.Add(cannonBall);
 		}
 		private void UpdateProjectiles()
 		{
@@ -456,6 +512,20 @@ score += enemies[i].Value;
 				if (projectiles[i].Active == false)
 				{
 					projectiles.RemoveAt(i);
+				}
+			}
+		}
+
+		private void UpdateCannonBalls()
+		{
+			// Update the Projectiles
+			for (int i = cannonBalls.Count - 1; i >= 0; i--)
+			{
+				cannonBalls[i].Update();
+
+				if (cannonBalls[i].Active == false)
+				{
+					cannonBalls.RemoveAt(i);
 				}
 			}
 		}
