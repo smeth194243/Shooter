@@ -103,7 +103,7 @@ namespace Shooter.Controller
 			previousSpawnTime = TimeSpan.Zero;
 
 			// Used to determine how fast enemy respawns
-			enemySpawnTime = TimeSpan.FromSeconds(1.0f);
+			enemySpawnTime = TimeSpan.FromSeconds(0.01f);
 
 			// Initialize our random number generator
 			random = new Random();
@@ -119,7 +119,7 @@ namespace Shooter.Controller
 			cannonBalls = new List<CannonBall>();
 
 			// Set the laser to fire every quarter second
-			fireTime = TimeSpan.FromSeconds(.15f);
+			fireTime = TimeSpan.FromSeconds(.01f);
 
 			explosions = new List<Animation>();
 
@@ -154,7 +154,7 @@ namespace Shooter.Controller
 
 			mainBackground = Content.Load<Texture2D>("Texture/mainbackground");
 			projectileTexture = Content.Load<Texture2D>("Texture/laser");
-			cannonBallTexture = Content.Load<Texture2D>("Fireball.png");
+			cannonBallTexture = Content.Load<Texture2D>("Fireball");
 			explosionTexture = Content.Load<Texture2D>("Animation/explosion");
 
 			// Load the music
@@ -391,6 +391,9 @@ namespace Shooter.Controller
 					// If not active and health <= 0
 					if (enemies[i].Health <= 0)
 					{
+                       	AddEnemy();
+                       	
+                       	
 						// Add an explosion
 						AddExplosion(enemies[i].Position);
 						// Play the explosion sound
@@ -496,11 +499,12 @@ namespace Shooter.Controller
 			projectiles.Add(projectile);
 		}
 
-		private void AddCannonball(Vector2 position)
+		private void AddCannonBall(Vector2 position)
 		{
+
 			CannonBall cannonBall = new CannonBall();
-			cannonBall.Initialize(GraphicsDevice.Viewport, cannonBallTexture, position);
-			cannonBall.Add(cannonBall);
+			cannonBall.Initialize(GraphicsDevice.Viewport, cannonBallTexture, new Vector2(player.Position.X, random.Next(100, GraphicsDevice.Viewport.Height - 100)));
+			cannonBalls.Add(cannonBall);
 		}
 		private void UpdateProjectiles()
 		{

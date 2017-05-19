@@ -1,12 +1,12 @@
 ﻿<Properties StartupConfiguration="{9AC71EF3-231C-4F1E-BB03-A8A8E1962450}|Default">
   <MonoDevelop.Ide.ItemProperties.Shooter PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Shooter/Model/Enemy.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Shooter/Controller/SteamPunkShooterGame.cs">
     <Files>
-      <File FileName="Shooter/Controller/SteamPunkShooterGame.cs" Line="468" Column="68" />
+      <File FileName="Shooter/Controller/SteamPunkShooterGame.cs" Line="276" Column="6" />
       <File FileName="../../../../../../Library/Frameworks/MonoGame.framework/v3.6.0.1625/MonoGame.Content.Builder.targets" Line="1" Column="1" />
       <File FileName="Shooter/Content/Content.mgcb" Line="1" Column="1" />
-      <File FileName="Shooter/Model/CannonBall.cs" Line="16" Column="3" />
-      <File FileName="Shooter/Model/Projectile.cs" Line="73" Column="1" />
+      <File FileName="Shooter/Model/CannonBall.cs" Line="57" Column="23" />
+      <File FileName="Shooter/Model/Projectile.cs" Line="43" Column="3" />
       <File FileName="Shooter/Model/Enemy.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
